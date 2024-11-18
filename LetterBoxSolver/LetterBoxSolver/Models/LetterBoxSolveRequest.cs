@@ -2,7 +2,7 @@
 {
     public class LetterBoxSolveRequest
     {
-        public List<string> Chars { get; set; } = new List<string>();
+        public string Chars { get; set; } = "";
         public int Sides { get; set; }
     }
 }

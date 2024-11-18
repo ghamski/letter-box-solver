@@ -8,11 +8,6 @@ namespace LetterBoxSolver.Controllers
     [Route("[controller]")]
     public class LetterBoxSolverController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
         private readonly ILogger<LetterBoxSolverController> _logger;
         private readonly ILetterBoxSolvingService _letterBoxSolvingService;
 
@@ -23,24 +18,32 @@ namespace LetterBoxSolver.Controllers
         }
 
         [HttpPost(Name = "Solve")]
-        public IEnumerable<(string, string)> Solve([FromBody] LetterBoxSolveRequest request)
+        public ActionResult<IEnumerable<(string, string)>> Solve([FromBody] LetterBoxSolveRequest request)
         {
             if (request == null)
             {
-                throw new ArgumentException("Invalid request");
+                return BadRequest("Requset can not be empty");
             }
 
-            if (request.Sides == 0 || request.Chars.Count == 0)
+            if (request.Sides == 0 || request.Chars.Length == 0)
             {
-                throw new ArgumentException("Letters and sides must be > 0");
+                return BadRequest("Letters and sides must be > 0");
             }
 
-            if (request.Sides * 3 != request.Chars.Count)
+            if (request.Sides * 3 != request.Chars.Length)
             {
-                throw new ArgumentException("Length of chars array should equal sides * 3");
+                return BadRequest("Length of chars array should equal sides * 3");
             }
 
-            return _letterBoxSolvingService.Solve(request.Chars, request.Sides);
+            try
+            {
+                return Ok(_letterBoxSolvingService.Solve(request.Chars));
+            }
+            catch(Exception e)
+            {
+                _logger.LogError($"Encountered error while attempting to solve letter box request. Message: {e.Message}", e);
+                throw;
+            }
         }
     }
 }

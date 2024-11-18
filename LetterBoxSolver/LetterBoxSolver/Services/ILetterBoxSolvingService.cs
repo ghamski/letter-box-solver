@@ -1,7 +1,9 @@
-﻿namespace LetterBoxSolver.Services
+﻿using LetterBoxSolver.Models;
+
+namespace LetterBoxSolver.Services
 {
     public interface ILetterBoxSolvingService
     {
-        public List<(string, string)> Solve(List<string> chars, int sides);
+        public List<LetterBoxSolution> Solve(string allLetters);
     }
 }

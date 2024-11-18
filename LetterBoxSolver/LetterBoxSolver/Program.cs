@@ -1,3 +1,4 @@
+using LetterBoxSolver.Repos;
 using LetterBoxSolver.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILetterBoxSolvingService, LetterBoxSolverService>();
+builder.Services.AddScoped<IDictionaryRepository, DictionaryRepository>();
 
 var app = builder.Build();
 
